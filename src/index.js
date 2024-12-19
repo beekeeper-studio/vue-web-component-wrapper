@@ -9,8 +9,9 @@ import {
   convertAttributeValue
 } from './utils.js'
 
-export default function wrap (Vue, Component) {
+export default function wrap (Vue, Component, configs = {}) {
   const isAsync = typeof Component === 'function' && !Component.cid
+  const { disableShadowDom = false } = configs
   let isInitialized = false
   let hyphenatedPropsList
   let camelizedPropsList
@@ -81,10 +82,12 @@ export default function wrap (Vue, Component) {
   class CustomElement extends HTMLElement {
     constructor () {
       const self = super()
-      self.attachShadow({ mode: 'open' })
+      if (!disableShadowDom) {
+        self.attachShadow({ mode: 'open' })
+      }
 
       const wrapper = self._wrapper = new Vue({
-        name: 'shadow-root',
+        name: disableShadowDom ? 'light-dom-root' : 'shadow-root',
         customElement: self,
         shadowRoot: self.shadowRoot,
         data () {
@@ -160,7 +163,9 @@ export default function wrap (Vue, Component) {
           this.childNodes
         ))
         wrapper.$mount()
-        this.shadowRoot.appendChild(wrapper.$el)
+        if (!disableShadowDom) {
+          this.shadowRoot.appendChild(wrapper.$el)
+        }
       } else {
         callHooks(this.vueComponent, 'activated')
       }
