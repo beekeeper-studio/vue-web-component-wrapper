@@ -163,7 +163,9 @@ export default function wrap (Vue, Component, configs = {}) {
           this.childNodes
         ))
         wrapper.$mount()
-        if (!disableShadowDom) {
+        if (disableShadowDom) {
+          this.appendChild(wrapper.$el)
+        } else {
           this.shadowRoot.appendChild(wrapper.$el)
         }
       } else {
