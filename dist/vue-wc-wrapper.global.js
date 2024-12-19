@@ -100,7 +100,7 @@ function getAttributes (node) {
 
 function wrap (Vue, Component, configs = {}) {
   const isAsync = typeof Component === 'function' && !Component.cid;
-  const { disableShadowDom = false } = configs;
+  const { disableShadowDom = false, classList = [] } = configs;
   let isInitialized = false;
   let hyphenatedPropsList;
   let camelizedPropsList;
@@ -174,6 +174,8 @@ function wrap (Vue, Component, configs = {}) {
       if (!disableShadowDom) {
         self.attachShadow({ mode: 'open' });
       }
+
+      this.classList.add(...classList);
 
       const wrapper = self._wrapper = new Vue({
         name: disableShadowDom ? 'light-dom-root' : 'shadow-root',
