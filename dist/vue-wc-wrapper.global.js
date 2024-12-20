@@ -175,8 +175,6 @@ function wrap (Vue, Component, configs = {}) {
         self.attachShadow({ mode: 'open' });
       }
 
-      this.classList.add(...classList);
-
       const wrapper = self._wrapper = new Vue({
         name: disableShadowDom ? 'light-dom-root' : 'shadow-root',
         customElement: self,
@@ -226,6 +224,10 @@ function wrap (Vue, Component, configs = {}) {
     }
 
     connectedCallback () {
+      if (classList.length > 0) {
+        this.classList.add(...classList);
+      }
+
       const wrapper = this._wrapper;
       if (!wrapper._isMounted) {
         // initialize attributes
