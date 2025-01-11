@@ -1,5 +1,12 @@
 # @vue/web-component-wrapper [![CircleCI](https://circleci.com/gh/vuejs/vue-web-component-wrapper.svg?style=shield)](https://circleci.com/gh/vuejs/vue-web-component-wrapper)
 
+
+Features and bug fixes that has been added:
+- Option to disable shadow dom
+- Fix ignored props before component is connected https://github.com/vuejs/vue-web-component-wrapper/pull/81
+
+----------------------------------------------------------------------
+
 > Wrap and register a Vue component as a custom element.
 
 ## Compatibility

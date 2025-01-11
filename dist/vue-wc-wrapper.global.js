@@ -11,10 +11,10 @@ const hyphenate = str => {
   return str.replace(hyphenateRE, '-$1').toLowerCase()
 };
 
-function getInitialProps (propsList) {
+function getInitialProps (propsList, el) {
   const res = {};
   propsList.forEach(key => {
-    res[key] = undefined;
+    res[key] = el[key];
   });
   return res
 }
@@ -232,10 +232,14 @@ function wrap (Vue, Component, configs = {}) {
       if (!wrapper._isMounted) {
         // initialize attributes
         const syncInitialAttributes = () => {
-          wrapper.props = getInitialProps(camelizedPropsList);
-          hyphenatedPropsList.forEach(key => {
-            syncAttribute(this, key);
-          });
+          const initialProps = getInitialProps(camelizedPropsList, this);
+          const isUndefined = key => initialProps[camelize(key)] === undefined;
+          wrapper.props = initialProps;
+          hyphenatedPropsList
+            .filter(key => this.hasAttribute(key) || isUndefined(key))
+            .forEach(key => {
+              syncAttribute(this, key);
+            });
         };
 
         if (isInitialized) {
