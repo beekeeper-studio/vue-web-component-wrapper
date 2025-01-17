@@ -11,7 +11,7 @@ import {
 
 export default function wrap (Vue, Component, configs = {}) {
   const isAsync = typeof Component === 'function' && !Component.cid
-  const { disableShadowDom = false, classList = [] } = configs
+  const { disableShadowDom = false, classList = [], exposeMethods = [] } = configs
   let isInitialized = false
   let hyphenatedPropsList
   let camelizedPropsList
@@ -43,6 +43,15 @@ export default function wrap (Vue, Component, configs = {}) {
         this.$root.$options.customElement.dispatchEvent(createCustomEvent(name, args))
         return emit.call(this, name, ...args)
       }
+    })
+
+    // proxy methods as Element methods
+    exposeMethods.forEach(key => {
+      Object.defineProperty(CustomElement.prototype, key, {
+        value (...args) {
+          return options.methods[key].call(this.vueComponent, ...args)
+        }
+      })
     })
 
     injectHook(options, 'created', function () {

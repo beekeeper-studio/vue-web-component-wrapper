@@ -4,6 +4,7 @@
 Features and bug fixes that has been added:
 - Option to disable shadow dom
 - Fix ignored props before component is connected https://github.com/vuejs/vue-web-component-wrapper/pull/81
+- Option to proxy methods
 
 ----------------------------------------------------------------------
 
