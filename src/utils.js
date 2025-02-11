@@ -34,7 +34,7 @@ export function createCustomEvent (name, args) {
   return new CustomEvent(name, {
     bubbles: false,
     cancelable: false,
-    detail: args
+    detail: args ? args[0] : undefined,
   })
 }
 
